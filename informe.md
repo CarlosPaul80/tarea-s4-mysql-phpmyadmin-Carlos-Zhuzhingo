@@ -6,7 +6,7 @@
 
 **Carrera:** Desarrollo de Software
 
-**Actividad:** Semana 3
+**Actividad:** Semana 4
 
 **Fecha:** 28 de octubre de 2026
 
@@ -61,7 +61,7 @@ La práctica se realizó en Docker Desktop del mismo computador.
 
 ## 7. Material de apoyo
 
-- Indicaciones de la actividad de la semana 3.
+- Indicaciones de la actividad de la semana 4.
 - [Plantilla del informe](https://github.com/maguaman2/informe-tendencias/blob/main/informe.md).
 - [Imagen oficial de MySQL](https://hub.docker.com/_/mysql).
 - [Imagen oficial de phpMyAdmin](https://hub.docker.com/_/phpmyadmin).
