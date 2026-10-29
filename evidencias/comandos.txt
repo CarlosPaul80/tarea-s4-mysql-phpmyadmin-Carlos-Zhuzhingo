@@ -1,0 +1,109 @@
+$ docker version --format {{.Server.Version}}
+29.9.2
+
+$ docker network create --driver bridge --label practica=mysql-phpmyadmin red_mysql
+515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891
+
+$ docker run -d --name mysql_server --network red_mysql --label practica=mysql-phpmyadmin -e MYSQL_ROOT_PASSWORD=<clave-local> -e MYSQL_ROOT_HOST=% mysql:8.4
+7daa690db6ef64ebcdbb7c8e3f65d253fec0605efa4a21ed5ca75ca3e70779bd
+
+$ docker run -d --name phpmyadmin --network red_mysql --label practica=mysql-phpmyadmin -e PMA_HOST=mysql_server -e PMA_PORT=3306 -p 127.0.0.1:8081:80 phpmyadmin:5.2
+581d591ccb965f0b871d72974427affacb9a982912e27520065e76bb402426e8
+
+$ docker exec mysql_server sh -c MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot -N -B -e "$1" sh SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='test';
+
+$ docker exec mysql_server sh -c MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot -N -B -e "$1" sh SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='test';
+test
+
+$ docker exec mysql_server sh -c MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot -N -B -e "$1" sh SELECT VERSION();
+8.4.13
+
+$ docker inspect mysql_server --format {{.Id}}
+7daa690db6ef64ebcdbb7c8e3f65d253fec0605efa4a21ed5ca75ca3e70779bd
+
+$ docker inspect mysql_server --format {{json .NetworkSettings.Networks}}
+{"red_mysql":{"IPAMConfig":null,"Links":null,"Aliases":null,"DriverOpts":null,"GwPriority":0,"NetworkID":"515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891","EndpointID":"d85b088ee0f822a1565e259fca324cdae40fe45fefb43387a00cff1d00d78b55","Gateway":"172.19.0.1","IPAddress":"172.19.0.2","MacAddress":"b6:49:84:7c:cd:70","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["mysql_server","7daa690db6ef"]}}
+
+$ docker inspect mysql_server --format {{json .NetworkSettings.Ports}}
+{"3306/tcp":null,"33060/tcp":null}
+
+$ docker inspect phpmyadmin --format {{.Id}}
+581d591ccb965f0b871d72974427affacb9a982912e27520065e76bb402426e8
+
+$ docker inspect phpmyadmin --format {{json .NetworkSettings.Networks}}
+{"red_mysql":{"IPAMConfig":null,"Links":null,"Aliases":null,"DriverOpts":null,"GwPriority":0,"NetworkID":"515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891","EndpointID":"14973c2fbb6870fc02ef9a406335c8a3b9ec767e4ce8f80a6c6f3f0663c174f7","Gateway":"172.19.0.1","IPAddress":"172.19.0.3","MacAddress":"be:1a:79:66:be:6e","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["phpmyadmin","581d591ccb96"]}}
+
+$ docker inspect phpmyadmin --format {{json .NetworkSettings.Ports}}
+{"80/tcp":[{"HostIp":"127.0.0.1","HostPort":"8081"}]}
+
+$ docker network inspect red_mysql
+[
+    {
+        "Name": "red_mysql",
+        "Id": "515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891",
+        "Created": "2026-10-29T01:50:08.999107566Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Options": {
+            "com.docker.network.enable_ipv4": "true",
+            "com.docker.network.enable_ipv6": "false"
+        },
+        "Labels": {
+            "practica": "mysql-phpmyadmin"
+        },
+        "Containers": {
+            "581d591ccb965f0b871d72974427affacb9a982912e27520065e76bb402426e8": {
+                "Name": "phpmyadmin",
+                "EndpointID": "14973c2fbb6870fc02ef9a406335c8a3b9ec767e4ce8f80a6c6f3f0663c174f7",
+                "MacAddress": "be:1a:79:66:be:6e",
+                "IPv4Address": "172.19.0.3/16",
+                "IPv6Address": ""
+            },
+            "7daa690db6ef64ebcdbb7c8e3f65d253fec0605efa4a21ed5ca75ca3e70779bd": {
+                "Name": "mysql_server",
+                "EndpointID": "d85b088ee0f822a1565e259fca324cdae40fe45fefb43387a00cff1d00d78b55",
+                "MacAddress": "b6:49:84:7c:cd:70",
+                "IPv4Address": "172.19.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Status": {
+            "IPAM": {
+                "Subnets": {
+                    "172.19.0.0/16": {
+                        "IPsInUse": 5,
+                        "DynamicIPsAvailable": 65531
+                    }
+                }
+            }
+        }
+    }
+]
+
+$ docker exec phpmyadmin php -r echo gethostbyname("mysql_server"), PHP_EOL;
+172.19.0.2
+
+$ docker ps --filter label=practica=mysql-phpmyadmin --format table {{.Names}}	{{.Image}}	{{.Status}}	{{.Ports}}
+NAMES          IMAGE            STATUS         PORTS
+phpmyadmin     phpmyadmin:5.2   Up 2 minutes   127.0.0.1:8081->80/tcp
+mysql_server   mysql:8.4        Up 2 minutes   3306/tcp, 33060/tcp
+

@@ -1,0 +1,134 @@
+{
+  "entorno": "Windows con Docker Desktop local y WSL 2",
+  "fecha": "28 de octubre de 2026",
+  "base_antes": "",
+  "imagen_mysql": "mysql:8.4",
+  "imagen_phpmyadmin": "phpmyadmin:5.2",
+  "base_despues": "test",
+  "creacion": "Interfaz de phpMyAdmin: Bases de datos > Crear base de datos",
+  "mysql_version": "8.4.13",
+  "contenedores": {
+    "mysql_server": {
+      "id": "7daa690db6ef64ebcdbb7c8e3f65d253fec0605efa4a21ed5ca75ca3e70779bd",
+      "redes": {
+        "red_mysql": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891",
+          "EndpointID": "d85b088ee0f822a1565e259fca324cdae40fe45fefb43387a00cff1d00d78b55",
+          "Gateway": "172.19.0.1",
+          "IPAddress": "172.19.0.2",
+          "MacAddress": "b6:49:84:7c:cd:70",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "mysql_server",
+            "7daa690db6ef"
+          ]
+        }
+      },
+      "puertos": {
+        "3306/tcp": null,
+        "33060/tcp": null
+      }
+    },
+    "phpmyadmin": {
+      "id": "581d591ccb965f0b871d72974427affacb9a982912e27520065e76bb402426e8",
+      "redes": {
+        "red_mysql": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891",
+          "EndpointID": "14973c2fbb6870fc02ef9a406335c8a3b9ec767e4ce8f80a6c6f3f0663c174f7",
+          "Gateway": "172.19.0.1",
+          "IPAddress": "172.19.0.3",
+          "MacAddress": "be:1a:79:66:be:6e",
+          "IPPrefixLen": 16,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": [
+            "phpmyadmin",
+            "581d591ccb96"
+          ]
+        }
+      },
+      "puertos": {
+        "80/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8081"
+          }
+        ]
+      }
+    }
+  },
+  "red": {
+    "Name": "red_mysql",
+    "Id": "515580d776d7392d0295f22c97974415e00a0c36b5902702b5b717c270344891",
+    "Created": "2026-10-29T01:50:08.999107566Z",
+    "Scope": "local",
+    "Driver": "bridge",
+    "EnableIPv4": true,
+    "EnableIPv6": false,
+    "IPAM": {
+      "Driver": "default",
+      "Options": {},
+      "Config": [
+        {
+          "Subnet": "172.19.0.0/16",
+          "Gateway": "172.19.0.1"
+        }
+      ]
+    },
+    "Internal": false,
+    "Attachable": false,
+    "Ingress": false,
+    "ConfigFrom": {
+      "Network": ""
+    },
+    "ConfigOnly": false,
+    "Options": {
+      "com.docker.network.enable_ipv4": "true",
+      "com.docker.network.enable_ipv6": "false"
+    },
+    "Labels": {
+      "practica": "mysql-phpmyadmin"
+    },
+    "Containers": {
+      "581d591ccb965f0b871d72974427affacb9a982912e27520065e76bb402426e8": {
+        "Name": "phpmyadmin",
+        "EndpointID": "14973c2fbb6870fc02ef9a406335c8a3b9ec767e4ce8f80a6c6f3f0663c174f7",
+        "MacAddress": "be:1a:79:66:be:6e",
+        "IPv4Address": "172.19.0.3/16",
+        "IPv6Address": ""
+      },
+      "7daa690db6ef64ebcdbb7c8e3f65d253fec0605efa4a21ed5ca75ca3e70779bd": {
+        "Name": "mysql_server",
+        "EndpointID": "d85b088ee0f822a1565e259fca324cdae40fe45fefb43387a00cff1d00d78b55",
+        "MacAddress": "b6:49:84:7c:cd:70",
+        "IPv4Address": "172.19.0.2/16",
+        "IPv6Address": ""
+      }
+    },
+    "Status": {
+      "IPAM": {
+        "Subnets": {
+          "172.19.0.0/16": {
+            "IPsInUse": 5,
+            "DynamicIPsAvailable": 65531
+          }
+        }
+      }
+    }
+  },
+  "resolucion_dns": "172.19.0.2"
+}
